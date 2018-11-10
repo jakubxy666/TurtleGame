@@ -1,0 +1,34 @@
+<?import javafx.scene.layout.BorderPane?>
+
+<?import javafx.scene.control.Label?>
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
+    <top>
+        <Label prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0" alignment="BASELINE_CENTER">
+            Turtle Game (score etc. ?)
+        </Label>
+    </top>
+
+    <bottom>
+        <Label prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 1 0 0 0" alignment="BASELINE_CENTER">
+            Command Sequence
+        </Label>
+    </bottom>
+
+    <left>
+        <Label prefHeight="480" prefWidth="120" style="-fx-border-style: solid; -fx-border-width: 0 1 0 0" alignment="BASELINE_CENTER">
+            Commands
+        </Label>
+    </left>
+
+    <right>
+        <Label prefHeight="480" prefWidth="180" style="-fx-border-style: solid; -fx-border-width: 0 0 0 1" alignment="BASELINE_CENTER">
+            History
+        </Label>
+    </right>
+
+    <center>
+        <Label>
+            Board
+        </Label>
+    </center>
+</BorderPane>
