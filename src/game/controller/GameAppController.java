@@ -20,7 +20,6 @@ public class GameAppController {
     public void initRootLayout() {
         try {
             this.primaryStage.setTitle("Turtle Game");
-
             // load layout from FXML file
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/game.fxml"));

@@ -4,6 +4,9 @@ import game.model.Board;
 import game.model.CommandSequence;
 import game.model.Turtle;
 import game.model.command.StepForwardCommand;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import game.model.generator.DataGenerator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -69,7 +72,6 @@ public class GameOverviewController {
     private void handleExecuteCommandSequenceAction(ActionEvent event) {
         info.setText(commandSequence.execute());
         System.out.println("Execute event fired.");
-        updateCanvas();
     }
 
     @FXML
@@ -91,6 +93,7 @@ public class GameOverviewController {
                     }
                     gc.fillRect(100 * i+5, 100 * j+5, 100-10, 100-10);
                     Turtle t = boardData.getTurtle();
+
                     if(t.getX()==i && t.getY()==j)
                         gc.drawImage(fxImage,100*i + 15, 100*j + 15 ,70,70);
                 }
@@ -100,7 +103,20 @@ public class GameOverviewController {
 
     public void setData(Board board) {
         this.boardData = board;
+
+        ChangeListener listener = new ChangeListener(){
+            @Override public void changed(ObservableValue o, Object oldVal,
+                                          Object newVal){
+                updateCanvas();
+            }
+        };
+
+        this.boardData.getTurtle().getXProperty().addListener(listener);
+        this.boardData.getTurtle().getYProperty().addListener(listener);
+        this.boardData.getTurtle().getOrientationProperty().addListener(listener);
+
         this.commandSequence = new CommandSequence(board.getFields());
+
         updateCanvas();
     }
 
