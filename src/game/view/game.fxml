@@ -40,6 +40,24 @@
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin></Button>
+
+                <Button fx:id="removeLastCommandButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                        mnemonicParsing="false" onAction="#handleRemoveLastCommandAction" text="Remove last command">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+
+                <Button fx:id="clearButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                        mnemonicParsing="false" onAction="#handleClearCommandSequenceAction" text="Clear">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+
+                <Button fx:id="executeButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                        mnemonicParsing="false" onAction="#handleExecuteCommandSequenceAction" text="Execute">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
             </children>
             <BorderPane.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
