@@ -19,11 +19,13 @@ public class DataGenerator {
         Turtle turtle = new Turtle(0, 2, Orientation.E);
         BoardField[][] fields = new BoardField[boardSize][boardSize];
 
-        for (int i = 0; i < boardSize; i++)
+        for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++)
-                fields[i][j] = arrContains(visible, i*boardSize+j) ?
+                fields[i][j] = arrContains(visible, i * boardSize + j) ?
                         new BoardField(true) : new BoardField(false);
+        }
 
+        fields[2][0].setVisited(true);
         Board board = new Board(turtle, fields);
         return board;
     }
