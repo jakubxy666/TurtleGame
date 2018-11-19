@@ -13,7 +13,7 @@
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
     <top>
         <Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0">
-            Turtle Game (score etc. ?)
+            Turtle Game
         </Label>
     </top>
 
@@ -45,6 +45,10 @@
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin></Button>
+                <Button fx:id="resetButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleResetAction" text="Reset">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
             </children>
             <BorderPane.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -53,9 +57,7 @@
     </left>
 
     <right>
-        <Label alignment="BASELINE_CENTER" prefHeight="480" prefWidth="180" style="-fx-border-style: solid; -fx-border-width: 0 0 0 1">
-            History
-        </Label>
+        <Text fx:id="info"></Text>
     </right>
 
     <center>

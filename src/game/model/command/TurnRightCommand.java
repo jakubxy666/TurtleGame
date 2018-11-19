@@ -14,8 +14,9 @@ public class TurnRightCommand implements ITurtleCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         turtle.setOrientation(Orientation.values()[oldOrientation.ordinal()+1]);
+        return true;
     }
 
     @Override

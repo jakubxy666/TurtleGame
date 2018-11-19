@@ -1,7 +1,7 @@
 package game.model.command;
 
 public interface ITurtleCommand {
-    void execute();
+    boolean execute();
     void undo();
     String getName();
 //    String getHelp();

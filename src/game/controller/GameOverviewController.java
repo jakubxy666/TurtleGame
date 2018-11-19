@@ -4,6 +4,7 @@ import game.model.Board;
 import game.model.CommandSequence;
 import game.model.Turtle;
 import game.model.command.StepForwardCommand;
+import game.model.generator.DataGenerator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -28,10 +29,11 @@ public class GameOverviewController {
 
     @FXML
     private Text commandSeq;
+    @FXML
+    private Text info;
 
     @FXML
     private void initialize() {
-        this.commandSequence = new CommandSequence();
         gc = boardCanvas.getGraphicsContext2D();
         try {
             fxImage = new Image(new FileInputStream("turtle.png"));
@@ -42,7 +44,7 @@ public class GameOverviewController {
 
     @FXML
     private void handleAddStepForwardAction(ActionEvent event) {
-        commandSequence.addCommand(new StepForwardCommand(boardData.getTurtle()));
+        commandSequence.addCommand(new StepForwardCommand(boardData));
         commandSeq.setText(commandSeq.getText() + "Step forward\n");
         System.out.println("Step forward event fired.");
     }
@@ -65,9 +67,17 @@ public class GameOverviewController {
 
     @FXML
     private void handleExecuteCommandSequenceAction(ActionEvent event) {
-        commandSequence.execute();
+        info.setText(commandSequence.execute());
         System.out.println("Execute event fired.");
         updateCanvas();
+    }
+
+    @FXML
+    private void handleResetAction(ActionEvent event) {
+        System.out.println("Reset event fired.");
+        setData(DataGenerator.generateGameData());
+        commandSeq.setText("");
+        info.setText("");
     }
 
     public void updateCanvas() {
@@ -89,8 +99,8 @@ public class GameOverviewController {
     }
 
     public void setData(Board board) {
-
         this.boardData = board;
+        this.commandSequence = new CommandSequence(board.getFields());
         updateCanvas();
     }
 

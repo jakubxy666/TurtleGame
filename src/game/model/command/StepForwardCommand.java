@@ -1,16 +1,23 @@
 package game.model.command;
 
+import game.model.Board;
+import game.model.BoardField;
 import game.model.Turtle;
 import game.model.command.ITurtleCommand;
 
 public class StepForwardCommand implements ITurtleCommand {
 
-    Turtle turtle;
-    int xOffset;
-    int yOffset;
+    private Board board;
+    private Turtle turtle;
+    private BoardField[][] fields;
 
-    public StepForwardCommand(Turtle t) {
-        this.turtle = t;
+    private int xOffset;
+    private int yOffset;
+
+    public StepForwardCommand(Board b) {
+        this.board = b;
+        this.turtle = b.getTurtle();
+        this.fields = b.getFields();
 
         switch (turtle.getOrientation()) {
             case E:
@@ -33,9 +40,17 @@ public class StepForwardCommand implements ITurtleCommand {
     }
 
     @Override
-    public void execute() {
-        turtle.setX(turtle.getX()+xOffset);
-        turtle.setY(turtle.getY()+yOffset);
+    public boolean execute() {
+        int newX = turtle.getX()+ xOffset;
+        int newY = turtle.getY()+ yOffset;
+
+        if (newX >= 0 && newX < 5 && newY >= 0 && newY < 5 && fields[newY][newX].isVisible()) {
+            turtle.setX(newX);
+            turtle.setY(newY);
+            fields[newY][newX].setVisited(true);
+            return true;
+        }
+        return false;
     }
 
     @Override
