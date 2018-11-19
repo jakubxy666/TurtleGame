@@ -12,7 +12,7 @@ public class StepForwardCommand implements ITurtleCommand {
     public StepForwardCommand(Turtle t) {
         this.turtle = t;
 
-        switch (turtle.getOrientation()){
+        switch (turtle.getOrientation()) {
             case E:
                 xOffset=1;
                 yOffset=0;

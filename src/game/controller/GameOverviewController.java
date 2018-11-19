@@ -14,7 +14,9 @@ public class GameOverviewController {
     }
 
     public void setData(Board board) {
+
         this.data = board;
+
     }
 
     public void setAppController(GameAppController appController) {
