@@ -45,9 +45,9 @@ public class StepForwardCommand implements ITurtleCommand {
         int newY = turtle.getY()+ yOffset;
 
         if (newX >= 0 && newX < 5 && newY >= 0 && newY < 5 && fields[newY][newX].isVisible()) {
+            fields[newY][newX].setVisited(true);
             turtle.setX(newX);
             turtle.setY(newY);
-            fields[newY][newX].setVisited(true);
             return true;
         }
         return false;
