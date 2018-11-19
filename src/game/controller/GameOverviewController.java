@@ -24,11 +24,17 @@ public class GameOverviewController {
     @FXML
     private Canvas boardCanvas;
     private GraphicsContext gc;
+    private Image fxImage;
 
     @FXML
     private void initialize() {
         this.commandSequence = new CommandSequence();
         gc = boardCanvas.getGraphicsContext2D();
+        try {
+            fxImage = new Image(new FileInputStream("turtle.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -53,6 +59,7 @@ public class GameOverviewController {
     private void handleExecuteCommandSequenceAction(ActionEvent event) {
         commandSequence.execute();
         System.out.println("Execute event fired.");
+        updateCanvas();
     }
 
     public void updateCanvas() {
@@ -70,14 +77,8 @@ public class GameOverviewController {
                     if(t.getX()==i&&t.getY()==j){
 //                        gc.setFill(Color.GREEN);
 //                        gc.fillRect(100 * i+15, 100 * j+15, 100-30, 100-30);
-                        Image fxImage = null;
-                        try {
-                            fxImage = new Image(new FileInputStream("/home/lzajac/Documents/addd/TurtleGame/turtle.jpg"));
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
 
-                        gc.drawImage(fxImage,100 * i+15, 100 * j+15 ,70,70);
+                        gc.drawImage(fxImage,100*i + 15, 100*j + 15 ,70,70);
 
                     }
                 }
