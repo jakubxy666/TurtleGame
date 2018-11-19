@@ -10,8 +10,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -27,6 +27,9 @@ public class GameOverviewController {
     private Image fxImage;
 
     @FXML
+    private Text commandSeq;
+
+    @FXML
     private void initialize() {
         this.commandSequence = new CommandSequence();
         gc = boardCanvas.getGraphicsContext2D();
@@ -40,18 +43,23 @@ public class GameOverviewController {
     @FXML
     private void handleAddStepForwardAction(ActionEvent event) {
         commandSequence.addCommand(new StepForwardCommand(boardData.getTurtle()));
+        commandSeq.setText(commandSeq.getText() + "Step forward\n");
         System.out.println("Step forward event fired.");
     }
 
     @FXML
     private void handleRemoveLastCommandAction(ActionEvent event) {
-        commandSequence.removeLastCommand();
+        if (commandSequence.getSize() > 0) {
+            commandSequence.removeLastCommand();
+            commandSeq.setText(commandSeq.getText().substring(0, commandSeq.getText().length() - 13));
+        }
         System.out.println("Remove last command event fired.");
     }
 
     @FXML
     private void handleClearCommandSequenceAction(ActionEvent event) {
         commandSequence.clear();
+        commandSeq.setText("");
         System.out.println("Clear sequence event fired.");
     }
 
@@ -63,7 +71,6 @@ public class GameOverviewController {
     }
 
     public void updateCanvas() {
-
         for (int i = 0; i < boardData.getFields().length; i++) {
             for (int j = 0; j < boardData.getFields().length; j++) {
                 if (boardData.getFields()[j][i].isVisible()) {
@@ -74,17 +81,11 @@ public class GameOverviewController {
                     }
                     gc.fillRect(100 * i+5, 100 * j+5, 100-10, 100-10);
                     Turtle t = boardData.getTurtle();
-                    if(t.getX()==i&&t.getY()==j){
-//                        gc.setFill(Color.GREEN);
-//                        gc.fillRect(100 * i+15, 100 * j+15, 100-30, 100-30);
-
+                    if(t.getX()==i && t.getY()==j)
                         gc.drawImage(fxImage,100*i + 15, 100*j + 15 ,70,70);
-
-                    }
                 }
             }
         }
-
     }
 
     public void setData(Board board) {

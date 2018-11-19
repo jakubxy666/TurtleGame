@@ -15,6 +15,10 @@ public class CommandSequence {
         commands.pop();
     }
 
+    public int getSize() {
+        return commands.size();
+    }
+
     public void clear() {
         commands.clear();
     }
@@ -22,7 +26,7 @@ public class CommandSequence {
     public void execute() {
         for (ITurtleCommand com : commands) {
             com.execute();
+            // update view here!
         }
-
     }
 }
