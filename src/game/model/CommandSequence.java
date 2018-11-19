@@ -23,5 +23,6 @@ public class CommandSequence {
         for (ITurtleCommand com : commands) {
             com.execute();
         }
+
     }
 }

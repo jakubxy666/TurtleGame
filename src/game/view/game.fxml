@@ -21,21 +21,6 @@
     </bottom>
 
     <left>
-        <Label alignment="BASELINE_CENTER" prefHeight="480" prefWidth="120" style="-fx-border-style: solid; -fx-border-width: 0 1 0 0">
-            Commands
-        </Label>
-    </left>
-
-    <right>
-        <Label alignment="BASELINE_CENTER" prefHeight="480" prefWidth="180" style="-fx-border-style: solid; -fx-border-width: 0 0 0 1">
-            History
-        </Label>
-    </right>
-
-    <center>
-        <Label>
-            Board
-        </Label>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="stepForwardButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddStepForwardAction" text="Step Forward">
@@ -62,6 +47,15 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </BorderPane.margin>
         </VBox>
+    </left>
+
+    <right>
+        <Label alignment="BASELINE_CENTER" prefHeight="480" prefWidth="180" style="-fx-border-style: solid; -fx-border-width: 0 0 0 1">
+            History
+        </Label>
+    </right>
+
+    <center>
         <Canvas fx:id="boardCanvas" height="500.0" width="500.0">
 
         </Canvas>

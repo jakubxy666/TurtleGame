@@ -14,17 +14,21 @@ public class StepForwardCommand implements ITurtleCommand {
 
         switch (turtle.getOrientation()) {
             case E:
-                xOffset=1;
-                yOffset=0;
+                xOffset = 1;
+                yOffset = 0;
+                break;
             case N:
-                xOffset=0;
-                yOffset=1;
+                xOffset = 0;
+                yOffset = 1;
+                break;
             case S:
-                xOffset=0;
-                yOffset=-1;
+                xOffset = 0;
+                yOffset = -1;
+                break;
             case W:
-                xOffset=-1;
-                yOffset=0;
+                xOffset = -1;
+                yOffset = 0;
+                break;
         }
     }
 
