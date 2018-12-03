@@ -62,4 +62,9 @@ public class Turtle {
     public void setOrientation(Orientation orientation) {
         this.orientation.setValue(orientation);
     }
+
+    public void moveTo(int x, int y){
+        this.setX(x);
+        this.setY(y);
+    }
 }
