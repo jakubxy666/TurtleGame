@@ -14,10 +14,10 @@ import java.util.List;
 
 public class DataGenerator {
 
-    public final static Board generateGameData() {
+    public final static Board generateGameData(int lvl) {
         String strJSON = "";
         try {
-            strJSON = new String(Files.readAllBytes(Paths.get("./src/main/resources/levels/lvl2.json")));
+            strJSON = new String(Files.readAllBytes(Paths.get("./src/main/resources/levels/lvl" + lvl + ".json")));
         } catch (IOException e) { System.out.println(e); }
 
         JSONObject lvlJSON = new JSONObject(strJSON);

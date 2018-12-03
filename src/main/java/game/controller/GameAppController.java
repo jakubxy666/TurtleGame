@@ -12,6 +12,7 @@ import java.io.IOException;
 public class GameAppController {
 
     private Stage primaryStage;
+    public static int lvl = 1;
 
     public GameAppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -29,7 +30,7 @@ public class GameAppController {
             // set initial data into controller
             GameOverviewController controller = loader.getController();
             controller.setAppController(this);
-            controller.setData(DataGenerator.generateGameData());
+            controller.setData(DataGenerator.generateGameData(GameAppController.lvl));
 
             // add layout to a scene and show them all
             Scene scene = new Scene(rootLayout);

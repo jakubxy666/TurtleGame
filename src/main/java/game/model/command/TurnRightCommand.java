@@ -1,31 +1,51 @@
 package game.model.command;
 
+import game.model.Board;
+import game.model.BoardField;
 import game.model.Orientation;
 import game.model.Turtle;
+import game.model.command.ITurtleCommand;
 
 public class TurnRightCommand implements ITurtleCommand {
 
-    Turtle turtle;
-    Orientation oldOrientation;
+    private Board board;
+    private Turtle turtle;
 
-    public TurnRightCommand(Turtle t) {
-        this.turtle = t;
-        oldOrientation = turtle.getOrientation();
+    private int xOffset;
+    private int yOffset;
+
+    public TurnRightCommand(Board b) {
+        this.board = b;
+        this.turtle = b.getTurtle();
     }
 
     @Override
     public boolean execute() {
-        turtle.setOrientation(Orientation.values()[oldOrientation.ordinal()+1]);
-        return true;
-    }
 
-    @Override
-    public void undo() {
-        turtle.setOrientation(Orientation.values()[oldOrientation.ordinal()-1]);
+        switch (turtle.getOrientation()) {
+            case E: {
+                turtle.setOrientation(Orientation.S);
+                return true;
+            }
+            case N: {
+                turtle.setOrientation(Orientation.E);
+                return true;
+            }
+            case S: {
+                turtle.setOrientation(Orientation.W);
+                return true;
+            }
+            case W: {
+                turtle.setOrientation(Orientation.N);
+                return true;
+            }
+            default:
+                return false;
+        }
     }
 
     @Override
     public String getName() {
-        return "Turn Right";
+        return "Turn right";
     }
 }

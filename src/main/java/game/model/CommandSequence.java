@@ -1,11 +1,14 @@
 package game.model;
 
+import game.controller.GameAppController;
 import game.model.command.ITurtleCommand;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class CommandSequence {
-    private LinkedList<ITurtleCommand> commands = new LinkedList<>();
+    private List<ITurtleCommand> commands = new ArrayList<>();
     private Board board;
 
     public CommandSequence(Board b) {
@@ -13,11 +16,11 @@ public class CommandSequence {
     }
 
     public void addCommand(ITurtleCommand command) {
-        commands.push(command);
+        commands.add(command);
     }
 
     public void removeLastCommand() {
-        commands.pop();
+        commands.remove(commands.size()-1);
     }
 
     public int getSize() {
@@ -40,7 +43,8 @@ public class CommandSequence {
             //check if all visible are also visited
             System.out.println("Nie ma bledow");
 
-            if (board.allVisited()) return "Great! :)";
+            if (board.allVisited())
+                return "Great! :)";
             else return "You didn't visited all fields :(";
         }
     }
