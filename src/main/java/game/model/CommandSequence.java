@@ -6,10 +6,10 @@ import java.util.LinkedList;
 
 public class CommandSequence {
     private LinkedList<ITurtleCommand> commands = new LinkedList<>();
-    private BoardField[][] fields;
+    private Board board;
 
-    public CommandSequence(BoardField[][] f) {
-        this.fields = f;
+    public CommandSequence(Board b) {
+        this.board = b;
     }
 
     public void addCommand(ITurtleCommand command) {
@@ -39,14 +39,8 @@ public class CommandSequence {
         else {
             //check if all visible are also visited
             System.out.println("Nie ma bledow");
-            boolean allVisibleAreVisited = true;
-            for (int i=0; i<5; i++) {
-                for (int j=0; j<5; j++) {
-                    if (fields[i][j].isVisible() && !fields[i][j].isVisited())
-                        allVisibleAreVisited = false;
-                }
-            }
-            if (allVisibleAreVisited) return "Great! :)";
+
+            if (board.allVisited()) return "Great! :)";
             else return "You didn't visited all fields :(";
         }
     }

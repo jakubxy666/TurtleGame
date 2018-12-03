@@ -9,7 +9,6 @@ public class StepForwardCommand implements ITurtleCommand {
 
     private Board board;
     private Turtle turtle;
-    private BoardField[][] fields;
 
     private int xOffset;
     private int yOffset;
@@ -17,7 +16,6 @@ public class StepForwardCommand implements ITurtleCommand {
     public StepForwardCommand(Board b) {
         this.board = b;
         this.turtle = b.getTurtle();
-        this.fields = b.getFields();
 
         switch (turtle.getOrientation()) {
             case E:
@@ -44,10 +42,9 @@ public class StepForwardCommand implements ITurtleCommand {
         int newX = turtle.getX()+ xOffset;
         int newY = turtle.getY()+ yOffset;
 
-        if (newX >= 0 && newX < 5 && newY >= 0 && newY < 5 && fields[newY][newX].isVisible()) {
-            fields[newY][newX].setVisited(true);
-            turtle.setX(newX);
-            turtle.setY(newY);
+        if (board.canMoveTo(newX,newY)) {
+            board.visitField(newX,newY);
+            turtle.moveTo(newX,newY);
             return true;
         }
         return false;

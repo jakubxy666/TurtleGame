@@ -42,5 +42,23 @@ public class Board {
     public void setFields(BoardField[][] fields) {
         this.fields = fields;
     }
+
+    public Boolean canMoveTo(int x, int y){
+        return (x >= 0 && x < 5 && y >= 0 && y < 5 && fields[y][x].isVisible());
+    }
+
+    public void visitField(int x, int y){
+        fields[y][x].setVisited(true);
+    }
+
+    public Boolean allVisited(){
+        for (int i=0; i<5; i++) {
+            for (int j=0; j<5; j++) {
+                if (fields[i][j].isVisible() && !fields[i][j].isVisited())
+                    return false;
+            }
+        }
+        return true;
+    }
 }
 

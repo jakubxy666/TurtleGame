@@ -114,7 +114,7 @@ public class GameOverviewController {
         this.boardData.getTurtle().getYProperty().addListener(listener);
         this.boardData.getTurtle().getOrientationProperty().addListener(listener);
 
-        this.commandSequence = new CommandSequence(board.getFields());
+        this.commandSequence = new CommandSequence(board);
 
         updateCanvas();
     }
