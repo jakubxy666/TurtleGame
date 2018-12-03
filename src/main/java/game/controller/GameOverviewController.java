@@ -38,7 +38,7 @@ public class GameOverviewController {
     private void initialize() {
         gc = boardCanvas.getGraphicsContext2D();
         try {
-            fxImage = new Image(new FileInputStream("../sample.project/src/main/resources/images/turtle.png"));
+            fxImage = new Image(new FileInputStream("./src/main/resources/images/turtle.png"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
