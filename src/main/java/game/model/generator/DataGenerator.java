@@ -1,32 +1,38 @@
 package game.model.generator;
 
 import game.model.Board;
-import game.model.BoardField;
 import game.model.Orientation;
 import game.model.Turtle;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 
 public class DataGenerator {
-    private final static int boardSize = 5;
-    private final static int[] visible = {10, 11, 12};
-
-    static boolean arrContains(int[] arr, int key) {
-        for (int i : arr)
-            if (i == key) return true;
-        return false;
-    }
 
     public final static Board generateGameData() {
-        Turtle turtle = new Turtle(0, 2, Orientation.E);
-        BoardField[][] fields = new BoardField[boardSize][boardSize];
+        String strJSON = "";
+        try {
+            strJSON = new String(Files.readAllBytes(Paths.get("./src/main/resources/levels/lvl2.json")));
+        } catch (IOException e) { System.out.println(e); }
 
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++)
-                fields[i][j] = arrContains(visible, i * boardSize + j) ?
-                        new BoardField(true) : new BoardField(false);
-        }
+        JSONObject lvlJSON = new JSONObject(strJSON);
 
-        fields[2][0].setVisited(true);
-        Board board = new Board(turtle, fields);
-        return board;
+        int boardSize = lvlJSON.getInt("boardSize");
+        int turtleX = lvlJSON.getInt("turtleX");
+        int turtleY = lvlJSON.getInt("turtleY");
+        String turtleOrientation = lvlJSON.getString("turtleOrientation");
+
+        JSONArray fieldsInfoJSON = lvlJSON.getJSONArray("fieldsInfo");
+        List fieldsInfo = fieldsInfoJSON.toList();
+
+        Turtle turtle = new Turtle(turtleX, turtleY, Orientation.valueOf(turtleOrientation));
+
+        return new Board(boardSize, turtle, fieldsInfo);
     }
+
 }
