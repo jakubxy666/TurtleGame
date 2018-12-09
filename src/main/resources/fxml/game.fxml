@@ -4,13 +4,13 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.control.ScrollPane?>
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
     <top>
         <Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0">
             Turtle Game
@@ -18,8 +18,8 @@
     </top>
 
     <bottom>
-        <ScrollPane prefWidth="100" prefHeight="100">
-            <Text fx:id="commandSeq"></Text>
+        <ScrollPane prefHeight="100" prefWidth="100">
+            <Text fx:id="commandSeq" />
         </ScrollPane>
     </bottom>
 
@@ -72,12 +72,15 @@
     </left>
 
     <right>
-        <Text fx:id="info"></Text>
+        <Text fx:id="info" />
     </right>
 
     <center>
-        <Canvas fx:id="boardCanvas" height="500.0" width="500.0">
-
-        </Canvas>
+        <Pane fx:id="boardPane" maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0">
+         <children>
+            <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
+            <Canvas fx:id="turtleCanvas" height="500.0" width="500.0" />
+         </children>
+        </Pane>
     </center>
 </BorderPane>

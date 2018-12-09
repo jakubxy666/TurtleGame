@@ -71,6 +71,10 @@ public class Turtle {
         return turtleMemory;
     }
 
+    public void wipeMemory(){
+        this.turtleMemory.clear();
+    }
+
     public void rotateTo(Orientation orientation){
         turtleMemory.add(MoveType.rotate(this.orientation.getValue(),orientation));
         setOrientation(orientation);
