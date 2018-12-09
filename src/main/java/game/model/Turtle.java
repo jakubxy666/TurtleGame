@@ -3,10 +3,14 @@ package game.model;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableIntegerValue;
 
+import java.util.LinkedList;
+
 public class Turtle {
     private IntegerProperty x;
     private IntegerProperty y;
     private ObjectProperty<Orientation> orientation;
+    private LinkedList<MoveType> turtleMemory = new LinkedList<>();
+
 
     public Turtle(int x, int y, Orientation orientation) {
         this.x= new SimpleIntegerProperty(x);
@@ -63,8 +67,18 @@ public class Turtle {
         this.orientation.setValue(orientation);
     }
 
+    public LinkedList<MoveType> getMemory(){
+        return turtleMemory;
+    }
+
+    public void rotateTo(Orientation orientation){
+        turtleMemory.add(MoveType.rotate(this.orientation.getValue(),orientation));
+        setOrientation(orientation);
+    }
+
     public void moveTo(int x, int y){
         this.setX(x);
         this.setY(y);
+        turtleMemory.add(MoveType.forward(getOrientation()));
     }
 }

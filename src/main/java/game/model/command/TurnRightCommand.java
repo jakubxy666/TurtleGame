@@ -24,19 +24,19 @@ public class TurnRightCommand implements ITurtleCommand {
 
         switch (turtle.getOrientation()) {
             case E: {
-                turtle.setOrientation(Orientation.S);
+                turtle.rotateTo(Orientation.S);
                 return true;
             }
             case N: {
-                turtle.setOrientation(Orientation.E);
+                turtle.rotateTo(Orientation.E);
                 return true;
             }
             case S: {
-                turtle.setOrientation(Orientation.W);
+                turtle.rotateTo(Orientation.W);
                 return true;
             }
             case W: {
-                turtle.setOrientation(Orientation.N);
+                turtle.rotateTo(Orientation.N);
                 return true;
             }
             default:
