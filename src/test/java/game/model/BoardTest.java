@@ -26,7 +26,7 @@ public class BoardTest {
     public void testGetFields() {
         // Setup
         final BoardField[][] expectedResult = new BoardField[][]{};
-
+        //jd
         // Run the test
         final BoardField[][] result = boardUnderTest.getFields();
 
