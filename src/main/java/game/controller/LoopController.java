@@ -66,6 +66,5 @@ public class LoopController {
     @FXML
     private void handleAddLoopAction(ActionEvent event) {
         loopSeq += ("-" + howManyIters);
-        //ovc.
     }
 }
