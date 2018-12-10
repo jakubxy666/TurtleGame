@@ -1,7 +1,6 @@
 package game.controller;
 
 import game.model.Board;
-import game.model.CommandSequence;
 import game.model.command.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -78,7 +77,12 @@ public class LoopController {
     private void handleAddLoopAction(ActionEvent event) {
         loopSeq += ("-" + howManyIters);
 
-        iters = Integer.parseInt(howManyIters.getText());
+        try {
+            iters = Integer.parseInt(howManyIters.getText());
+        } catch (NumberFormatException e) {
+            iters = 0;
+        }
+
         LoopCommand loop = new LoopCommand(iters,commands);
         ovc.addCommand(loop);
         dialogStage.close();
