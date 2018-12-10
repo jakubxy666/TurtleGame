@@ -4,14 +4,12 @@ import game.model.Board;
 import game.model.CommandSequence;
 import game.model.MoveType;
 import game.model.command.StepForwardCommand;
-
-
 import game.model.command.TurnLeftCommand;
 import game.model.command.TurnRightCommand;
+import game.model.generator.DataGenerator;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import game.model.generator.DataGenerator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.SnapshotParameters;
@@ -19,9 +17,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
-import javafx.scene.effect.MotionBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -228,10 +223,14 @@ public class GameOverviewController {
                 gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
                 gc_turtle.drawImage(fxImage.snapshot(params, null), x.intValue() - margin, y.intValue() - margin, 70 * width, 70 * width);
                 gc_turtle.setEffect(null);
+                System.out.println("ok");
             }
         };
 
-        s.setOnFinished(event -> timer.stop());
+        s.setOnFinished(event -> {
+            timer.stop();
+            //what to do after animation ends
+        });
         timer.start();
         s.play();
     }
