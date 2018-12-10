@@ -11,12 +11,15 @@ import game.model.generator.DataGenerator;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,6 +54,8 @@ public class GameOverviewController {
     private Text info;
     @FXML
     private Button nextLevelButton;
+    @FXML
+    private ChoiceBox levelBox;
 
     @FXML
     private void initialize() {
@@ -64,6 +69,23 @@ public class GameOverviewController {
         }
         info.setText(GameAppController.lvl + "/5");
         nextLevelButton.setVisible(false);
+
+        for (int i=0; i<5; i++)
+            levelBox.getItems().add("level " + String.format("%d", i+1));
+        levelBox.getSelectionModel().select(GameAppController.lvl-1);
+
+        levelBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                GameAppController.lvl = t1.intValue()+1;
+                setData(DataGenerator.generateGameData(GameAppController.lvl));
+                commandSeq.setText("");
+                info.setText(GameAppController.lvl + "/5");
+                nextLevelButton.setVisible(false);
+            }
+        });
+            // int selectedLvl = levelBox.getSelectionModel().getSelectedIndex();
+
     }
 
     public void addCommand(ITurtleCommand command){
@@ -143,6 +165,7 @@ public class GameOverviewController {
         commandSeq.setText("");
         info.setText(GameAppController.lvl + "/5");
         nextLevelButton.setVisible(false);
+        levelBox.getSelectionModel().select(GameAppController.lvl-1);
     }
 
     @FXML
@@ -248,11 +271,14 @@ public class GameOverviewController {
         this.boardData = board;
         this.commandSequence = new CommandSequence(board);
 
+        fxImage.setRotate(0);
+
         gc_turtle.clearRect(0,0,boardCanvas.getWidth(),boardCanvas.getHeight());
         gc_board.clearRect(0,0,boardCanvas.getWidth(),boardCanvas.getHeight());
         drawBoard();
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT);
+        gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
         gc_turtle.drawImage(fxImage.snapshot(params, null), 100 * boardData.getTurtle().getX() + 15, 100 * boardData.getTurtle().getY() + 15, 70, 70);
     }
 
