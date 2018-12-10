@@ -61,7 +61,8 @@ public class GameAppController {
             dialogStage.setScene(scene);
 
             LoopController loopc = loader.getController();
-            loopc.setData(ovc);
+            loopc.setData(ovc,ovc.getBoardData());
+            loopc.setDialogStage(dialogStage);
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();

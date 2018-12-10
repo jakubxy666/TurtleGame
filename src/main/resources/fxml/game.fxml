@@ -10,11 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
+<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
     <top>
-        <Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0">
-            Turtle Game
-        </Label>
+        <Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0" />
     </top>
 
     <bottom>
