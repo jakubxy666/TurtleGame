@@ -55,6 +55,8 @@ public class GameOverviewController {
     @FXML
     private Button nextLevelButton;
     @FXML
+    private Button executeButton;
+    @FXML
     private ChoiceBox levelBox;
 
     @FXML
@@ -136,6 +138,7 @@ public class GameOverviewController {
 
     @FXML
     private void handleExecuteCommandSequenceAction(ActionEvent event) {
+        executeButton.setDisable(true);
         int startX = boardData.getTurtle().getX();
         int startY = boardData.getTurtle().getY();
         info.setText(commandSequence.execute());
@@ -150,6 +153,7 @@ public class GameOverviewController {
 
     @FXML
     private void handleResetAction(ActionEvent event) {
+        executeButton.setDisable(false);
         System.out.println("Reset event fired.");
         setData(DataGenerator.generateGameData(GameAppController.lvl));
         commandSeq.setText("");
@@ -159,6 +163,7 @@ public class GameOverviewController {
 
     @FXML
     private void handleNextLevelAction(ActionEvent event) {
+        executeButton.setDisable(false);
         System.out.println("Next level event fired.");
         if (GameAppController.lvl < 5) GameAppController.lvl++;
         setData(DataGenerator.generateGameData(GameAppController.lvl));
