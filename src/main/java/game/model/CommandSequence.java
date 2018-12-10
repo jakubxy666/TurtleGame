@@ -1,10 +1,8 @@
 package game.model;
 
-import game.controller.GameAppController;
 import game.model.command.ITurtleCommand;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CommandSequence {

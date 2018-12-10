@@ -135,6 +135,13 @@ public class GameOverviewController {
         nextLevelButton.setVisible(false);
     }
 
+    @FXML
+    private void handleLoopAction(ActionEvent event) {
+        String loopseq = "";
+        appController.showLoopDialog();
+
+    }
+
     public void visitField(int x, int y) {
         gc_board.setFill(Color.BLUE);
         gc_board.fillRect(100 * x + 5, 100 * y + 5, 100 - 10, 100 - 10);
