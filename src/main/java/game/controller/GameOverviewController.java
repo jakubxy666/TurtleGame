@@ -18,6 +18,10 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
+import javafx.scene.effect.MotionBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -143,16 +147,20 @@ public class GameOverviewController {
 
     public void drawBoard() {
         gc_turtle.clearRect(0, 0, boardCanvas.getHeight(), boardCanvas.getWidth());
-        gc_board.setFill(Color.GREEN);
-        gc_board.fillRect(0, 0, boardCanvas.getHeight(), boardCanvas.getWidth());
+
+
         for (int i = 0; i < boardData.getFields().length; i++) {
             for (int j = 0; j < boardData.getFields().length; j++) {
                 if (boardData.getFields()[j][i].isVisible()) {
+                    gc_board.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
+
                     gc_board.setFill(Color.BROWN);
                     gc_board.fillRect(100 * i + 5, 100 * j + 5, 100 - 10, 100 - 10);
+                    gc_board.setEffect(null);
                 }
             }
         }
+
     }
 
     public void animate(LinkedList<MoveType> steps, int startX, int startY) {
@@ -210,8 +218,9 @@ public class GameOverviewController {
                 fxImage.setRotate(r.doubleValue());
                 double width = sin(toRadians(abs(r.doubleValue()) % 90)) + cos(toRadians(abs(r.doubleValue()) % 90));
                 double margin = (70 * width - 70) / 2;
+                gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
                 gc_turtle.drawImage(fxImage.snapshot(params, null), x.intValue() - margin, y.intValue() - margin, 70 * width, 70 * width);
-
+                gc_turtle.setEffect(null);
             }
         };
 
@@ -224,6 +233,8 @@ public class GameOverviewController {
         this.boardData = board;
         this.commandSequence = new CommandSequence(board);
 
+        gc_turtle.clearRect(0,0,boardCanvas.getWidth(),boardCanvas.getHeight());
+        gc_board.clearRect(0,0,boardCanvas.getWidth(),boardCanvas.getHeight());
         drawBoard();
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT);
