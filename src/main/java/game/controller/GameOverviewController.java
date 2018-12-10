@@ -3,6 +3,7 @@ package game.controller;
 import game.model.Board;
 import game.model.CommandSequence;
 import game.model.MoveType;
+import game.model.command.ITurtleCommand;
 import game.model.command.StepForwardCommand;
 import game.model.command.TurnLeftCommand;
 import game.model.command.TurnRightCommand;
@@ -63,6 +64,15 @@ public class GameOverviewController {
         }
         info.setText(GameAppController.lvl + "/5");
         nextLevelButton.setVisible(false);
+    }
+
+    public void addCommand(ITurtleCommand command){
+        commandSequence.addCommand(command);
+        commandSeq.setText(commandSeq.getText() + command.getName());
+    }
+
+    public Board getBoardData(){
+        return this.boardData;
     }
 
     @FXML
