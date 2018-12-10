@@ -15,6 +15,8 @@ import java.util.List;
 public class DataGenerator {
 
     public final static Board generateGameData(int lvl) {
+        if (lvl<=0)
+            return null;
         String strJSON = "";
         try {
             strJSON = new String(Files.readAllBytes(Paths.get("./src/main/resources/levels/lvl" + lvl + ".json")));
