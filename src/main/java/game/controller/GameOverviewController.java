@@ -233,7 +233,6 @@ public class GameOverviewController {
                 gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
                 gc_turtle.drawImage(fxImage.snapshot(params, null), x.intValue() - margin, y.intValue() - margin, 70 * width, 70 * width);
                 gc_turtle.setEffect(null);
-                System.out.println("ok");
             }
         };
 

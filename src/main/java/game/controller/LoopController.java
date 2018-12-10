@@ -77,9 +77,11 @@ public class LoopController {
     @FXML
     private void handleAddLoopAction(ActionEvent event) {
         loopSeq += ("-" + howManyIters);
+
         iters = Integer.parseInt(howManyIters.getText());
         LoopCommand loop = new LoopCommand(iters,commands);
         ovc.addCommand(loop);
         dialogStage.close();
+
     }
 }
