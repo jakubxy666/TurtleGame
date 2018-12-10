@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
+<BorderPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.LoopController">
     <top>
         <Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0">
-            Turtle Game
+            Loop
         </Label>
     </top>
-
-    <bottom>
-        <ScrollPane prefHeight="100" prefWidth="100">
-            <Text fx:id="commandSeq" />
-        </ScrollPane>
-    </bottom>
 
     <left>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
@@ -51,19 +44,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin></Button>
 
-                <Button fx:id="executeButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleExecuteCommandSequenceAction" text="Execute">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-                <Button fx:id="resetButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleResetAction" text="Reset">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-                <Button fx:id="nextLevelButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNextLevelAction" text="Next level">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-                <Button fx:id="loopButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLoopAction" text="Loop">
+                <Button fx:id="addLoopButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddLoopAction" text="Add Loop">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin></Button>
@@ -75,16 +56,12 @@
         </VBox>
     </left>
 
-    <right>
-        <Text fx:id="info" />
-    </right>
-
-    <center>
-        <Pane fx:id="boardPane" maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0">
-         <children>
-            <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
-            <Canvas fx:id="turtleCanvas" height="500.0" width="500.0" />
-         </children>
-        </Pane>
-    </center>
+    <bottom>
+        <ScrollPane prefHeight="100" prefWidth="100">
+            <Text fx:id="commandSeq" />
+        </ScrollPane>
+    </bottom>
+   <right>
+      <TextField fx:id="howManyIters" promptText="How many iterations" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>

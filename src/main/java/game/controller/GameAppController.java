@@ -12,6 +12,7 @@ import java.io.IOException;
 public class GameAppController {
 
     private Stage primaryStage;
+    private GameOverviewController ovc;
     public static int lvl = 1;
 
     public GameAppController(Stage primaryStage) {
@@ -32,6 +33,7 @@ public class GameAppController {
             controller.setAppController(this);
             controller.setData(DataGenerator.generateGameData(GameAppController.lvl));
 
+            ovc = controller;
             // add layout to a scene and show them all
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
@@ -42,5 +44,32 @@ public class GameAppController {
             e.printStackTrace();
         }
 
+    }
+
+    public boolean showLoopDialog() {
+        try {
+            // Load the fxml file and create a new stage for the dialog
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("/fxml/loop.fxml"));
+            BorderPane page = (BorderPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Create loop");
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            LoopController loopc = loader.getController();
+            loopc.setData(ovc);
+
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
