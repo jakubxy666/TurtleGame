@@ -79,10 +79,10 @@
 
     <center>
         <Pane fx:id="boardPane" maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0">
-         <children>
-            <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
-            <Canvas fx:id="turtleCanvas" height="500.0" width="500.0" />
-         </children>
+            <children>
+                <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
+                <Canvas fx:id="turtleCanvas" height="500.0" width="500.0" />
+            </children>
         </Pane>
     </center>
 </BorderPane>

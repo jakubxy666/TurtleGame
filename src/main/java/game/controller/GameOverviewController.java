@@ -86,7 +86,7 @@ public class GameOverviewController {
                 nextLevelButton.setVisible(false);
             }
         });
-            // int selectedLvl = levelBox.getSelectionModel().getSelectedIndex();
+        // int selectedLvl = levelBox.getSelectionModel().getSelectedIndex();
 
     }
 

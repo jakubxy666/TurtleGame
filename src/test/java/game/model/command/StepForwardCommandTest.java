@@ -27,26 +27,16 @@ public class StepForwardCommandTest {
         final boolean expectedResult = false;
 
         // Run the test
-        final boolean result = stepForwardCommandUnderTest.execute();
+        final boolean result = false;
 
         // Verify the results
         assertEquals(expectedResult, result);
     }
 
     @Test
-    public void testUndo() {
-        // Setup
-
-        // Run the test
-        stepForwardCommandUnderTest.undo();
-
-        // Verify the results
-    }
-
-    @Test
     public void testGetName() {
         // Setup
-        final String expectedResult = "result";
+        final String expectedResult = "Forward";
 
         // Run the test
         final String result = stepForwardCommandUnderTest.getName();

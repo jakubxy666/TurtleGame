@@ -3,19 +3,22 @@ package game.model;
 import game.model.command.ITurtleCommand;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CommandSequenceTest {
 
-    private BoardField[][] f;
+    @Mock
+    private Board mockB;
 
     private CommandSequence commandSequenceUnderTest;
 
     @Before
     public void setUp() {
-        f = new BoardField[][]{};
-        commandSequenceUnderTest = new CommandSequence(f);
+        initMocks(this);
+        commandSequenceUnderTest = new CommandSequence(mockB);
     }
 
     @Test
@@ -64,7 +67,7 @@ public class CommandSequenceTest {
     @Test
     public void testExecute() {
         // Setup
-        final String expectedResult = "result";
+        final String expectedResult = "You didn't visited all fields :(";
 
         // Run the test
         final String result = commandSequenceUnderTest.execute();
