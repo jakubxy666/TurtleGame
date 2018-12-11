@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
+    <top>
+        <Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0">
+            Turtle Game
+        </Label>
+    </top>
+
+    <bottom>
+        <ScrollPane prefWidth="100" prefHeight="100">
+            <Text fx:id="commandSeq"></Text>
+        </ScrollPane>
+    </bottom>
+
+    <left>
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="stepForwardButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddStepForwardAction" text="Step Forward">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+
+                <Button fx:id="removeLastCommandButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRemoveLastCommandAction" text="Remove last command">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+
+                <Button fx:id="clearButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearCommandSequenceAction" text="Clear">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+
+                <Button fx:id="executeButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleExecuteCommandSequenceAction" text="Execute">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+                <Button fx:id="resetButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleResetAction" text="Reset">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </BorderPane.margin>
+        </VBox>
+    </left>
+
+    <right>
+        <Text fx:id="info"></Text>
+    </right>
+
+    <center>
+        <Canvas fx:id="boardCanvas" height="500.0" width="500.0">
+
+        </Canvas>
+    </center>
+</BorderPane>
