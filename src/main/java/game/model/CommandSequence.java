@@ -18,7 +18,10 @@ public class CommandSequence {
     }
 
     public void removeLastCommand() {
-        commands.remove(commands.size()-1);
+        if (commands.size() > 0)
+            commands.remove(commands.size()-1);
+        else
+            System.out.println("Size is zero");
     }
 
     public int getSize() {

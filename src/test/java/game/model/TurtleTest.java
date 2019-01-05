@@ -17,7 +17,7 @@ public class TurtleTest {
     public void setUp() {
         x = 0;
         y = 0;
-        orientation = null;
+        orientation = Orientation.E;
         turtleUnderTest = new Turtle(x, y, orientation);
     }
 
@@ -70,7 +70,7 @@ public class TurtleTest {
     @Test
     public void testGetOrientation() {
         // Setup
-        final Orientation expectedResult = null;
+        final Orientation expectedResult = Orientation.E;
 
         // Run the test
         final Orientation result = turtleUnderTest.getOrientation();
@@ -86,6 +86,39 @@ public class TurtleTest {
 
         // Run the test
         turtleUnderTest.setOrientation(orientation);
+
+        // Verify the results
+    }
+
+    @Test
+    public void testWipeMemory() {
+        // Setup
+
+        // Run the test
+        turtleUnderTest.wipeMemory();
+
+        // Verify the results
+    }
+
+    @Test
+    public void testRotateTo() {
+        // Setup
+        final Orientation orientation = Orientation.N;
+
+        // Run the test
+        turtleUnderTest.rotateTo(orientation);
+
+        // Verify the results
+    }
+
+    @Test
+    public void testMoveTo() {
+        // Setup
+        final int x = 0;
+        final int y = 0;
+
+        // Run the test
+        turtleUnderTest.moveTo(x, y);
 
         // Verify the results
     }

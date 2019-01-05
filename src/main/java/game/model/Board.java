@@ -8,19 +8,28 @@ public class Board {
     private BoardField[][] fields;
 
     public Board(int boardSize, Turtle turtle, List fieldsInfo) {
-        this.boardSize = boardSize;
-        this.turtle = turtle;
+        if (boardSize > 0){
+            this.boardSize = boardSize;
+            this.turtle = turtle;
 
-        BoardField[][] fields = new BoardField[boardSize][boardSize];
+            BoardField[][] fields = new BoardField[boardSize][boardSize];
 
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++)
-                fields[i][j] = (((List)fieldsInfo.get(i)).get(j)).toString().charAt(0) == '#' ?
-                        new BoardField(true) : new BoardField(false);
+            for (int i = 0; i < boardSize; i++) {
+                for (int j = 0; j < boardSize; j++)
+                    fields[i][j] = (((List)fieldsInfo.get(i)).get(j)).toString().charAt(0) == '#' ?
+                            new BoardField(true) : new BoardField(false);
+            }
+
+
+            fields[turtle.getY()][turtle.getX()].setVisited(true);
+
+            this.fields = fields;
+        }
+        else{
+            fields = new BoardField[][]{};
+            this.fields = fields;
         }
 
-        fields[turtle.getY()][turtle.getX()].setVisited(true);
-        this.fields = fields;
     }
 
     public int getBoardSize() {
@@ -44,11 +53,17 @@ public class Board {
     }
 
     public Boolean canMoveTo(int x, int y){
-        return (x >= 0 && x < 5 && y >= 0 && y < 5 && fields[y][x].isVisible());
+        if (x>=0 && y>=0)
+            return (x >= 0 && x < 5 && y >= 0 && y < 5 && fields[y][x].isVisible());
+        else
+            return false;
     }
 
     public void visitField(int x, int y){
-        fields[y][x].setVisited(true);
+        if(x>=0 && y>=0)
+            fields[y][x].setVisited(true);
+        else
+            System.out.println("Error");
     }
 
     public Boolean allVisited(){

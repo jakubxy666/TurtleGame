@@ -13,8 +13,10 @@ public enum MoveType {
                 return Down;
             case E:
                 return Right;
+            default:
+                return null;
         }
-        return null;
+        //return null;
     }
 
     public static MoveType rotate(Orientation from, Orientation to){
