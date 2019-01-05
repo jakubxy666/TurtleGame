@@ -5,7 +5,9 @@ import game.model.Orientation;
 import game.model.Turtle;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONWriter;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,6 +15,37 @@ import java.util.List;
 
 
 public class DataGenerator {
+
+
+
+    private static JSONObject getStats() {
+        String strJSON = "";
+        try {
+            strJSON = new String(Files.readAllBytes(Paths.get("./src/main/resources/levels/statistics.json")));
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        return new JSONObject(strJSON);
+    }
+
+    public final static int getHighestUnlocked(){
+        JSONObject statJSON = getStats();
+        return statJSON.getInt("unlocked");
+    }
+
+    public final static void unlockLevel(Integer level){
+        JSONObject statJSON = getStats();
+        if (statJSON.getInt("unlocked")<level){
+            statJSON.remove("unlocked");
+            statJSON.put("unlocked",level.toString());
+            try (FileWriter file = new FileWriter("./src/main/resources/levels/statistics.json")) {
+                statJSON.write(file);
+            } catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+    }
 
     public final static Board generateGameData(int lvl) {
         if (lvl<=0)

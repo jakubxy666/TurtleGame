@@ -87,7 +87,7 @@ public class GameOverviewController {
         info.setText(GameAppController.lvl + "/5");
         nextLevelImage.setVisible(false);
 
-        for (int i=0; i<5; i++)
+        for (int i=0; i < DataGenerator.getHighestUnlocked(); i++)
             levelBox.getItems().add("level " + String.format("%d", i+1));
         levelBox.getSelectionModel().select(GameAppController.lvl-1);
 
@@ -133,6 +133,7 @@ public class GameOverviewController {
             loopBox.setStyle("-fx-background-color: #b40093;");
             for(ITurtleCommand command : loop.getCommands()) {
                 HBox container = new HBox();
+                container.setPadding(new Insets(0,5,0,0));
                 Image i = new Image(new FileInputStream(command.getImageURL()));
                 ImageView imageToAdd = new ImageView();
                 imageToAdd.setFitWidth(40);
@@ -192,8 +193,7 @@ public class GameOverviewController {
 
     @FXML
     private void handleClearCommandSequenceAction(Event event) {
-        commandBox.getChildren().remove(0,commandSequence.getSize());
-        commandSequence.clear();
+        commandBox.getChildren().clear();
 
 //        commandSeq.setText("");
         System.out.println("Clear sequence event fired.");
@@ -225,6 +225,7 @@ public class GameOverviewController {
 //        commandSeq.setText("");
         info.setText(GameAppController.lvl + "/5");
         boardData.getTurtle().wipeMemory();
+        commandBox.getChildren().clear();
     }
 
     @FXML
@@ -233,11 +234,14 @@ public class GameOverviewController {
         executeImage.setOpacity(100);
         System.out.println("Next level event fired.");
         if (GameAppController.lvl < 5) GameAppController.lvl++;
+        DataGenerator.unlockLevel(GameAppController.lvl);
+        levelBox.getItems().add("level " + String.format("%d", GameAppController.lvl));
         setData(DataGenerator.generateGameData(GameAppController.lvl));
 //        commandSeq.setText("");
         info.setText(GameAppController.lvl + "/5");
         nextLevelImage.setVisible(false);
         levelBox.getSelectionModel().select(GameAppController.lvl-1);
+        commandBox.getChildren().clear();
     }
 
     @FXML
@@ -352,6 +356,7 @@ public class GameOverviewController {
         params.setFill(Color.TRANSPARENT);
         gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
         gc_turtle.drawImage(fxImage.snapshot(params, null), 100 * boardData.getTurtle().getX() + 15, 100 * boardData.getTurtle().getY() + 15, 70, 70);
+        gc_turtle.setEffect(null);
     }
 
     public void setAppController(GameAppController appController) {
