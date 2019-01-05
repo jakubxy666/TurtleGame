@@ -1,12 +1,8 @@
 package game.controller;
 
 import game.model.Board;
-import game.model.command.CommandSequence;
+import game.model.command.*;
 import game.model.MoveType;
-import game.model.command.ITurtleCommand;
-import game.model.command.StepForwardCommand;
-import game.model.command.TurnLeftCommand;
-import game.model.command.TurnRightCommand;
 import game.model.generator.DataGenerator;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
@@ -28,16 +24,17 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.List;
 
 import static java.lang.Math.*;
 
@@ -107,7 +104,7 @@ public class GameOverviewController {
 
     public void addCommand(ITurtleCommand command){
         commandSequence.addCommand(command);
-        commandSeq.setText(commandSeq.getText() + command.getName());
+//        commandSeq.setText(commandSeq.getText() + command.getName());
     }
 
     public Board getBoardData(){
@@ -121,9 +118,41 @@ public class GameOverviewController {
         imageToAdd.setImage(image);
         imageToAdd.setVisible(true);
         HBox container = new HBox();
-        container.paddingProperty().setValue(new Insets(0,5,5,0));
+        container.setPadding(new Insets(0,5,5,0));
         container.getChildren().add(imageToAdd);
         commandBox.getChildren().addAll(container);
+    }
+    public void addLoopToBox(LoopCommand loop){
+        try {
+            HBox box = new HBox();
+
+
+            HBox loopBox = new HBox();
+            loopBox.setMaxHeight(50);
+            loopBox.setPadding(new Insets(5,5,5,5));
+            loopBox.setStyle("-fx-background-color: #b40093;");
+            for(ITurtleCommand command : loop.getCommands()) {
+                HBox container = new HBox();
+                Image i = new Image(new FileInputStream(command.getImageURL()));
+                ImageView imageToAdd = new ImageView();
+                imageToAdd.setFitWidth(40);
+                imageToAdd.setFitHeight(40);
+                imageToAdd.setImage(i);
+                imageToAdd.setVisible(true);
+                container.getChildren().add(imageToAdd);
+                loopBox.getChildren().add(container);
+            }
+            Text iters = new Text(" " + loop.getIterations().toString());
+            iters.setTextAlignment(TextAlignment.CENTER);
+
+            iters.setFont(new Font(30));
+            loopBox.getChildren().add(iters);
+            box.getChildren().addAll(loopBox);
+            commandBox.getChildren().add(box);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML

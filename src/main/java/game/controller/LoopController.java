@@ -85,6 +85,7 @@ public class LoopController {
 
         LoopCommand loop = new LoopCommand(iters,commands);
         ovc.addCommand(loop);
+        ovc.addLoopToBox(loop);
         dialogStage.close();
 
     }

@@ -48,4 +48,9 @@ public class TurnRightCommand implements ITurtleCommand {
     public String getName() {
         return "Turn right";
     }
+
+    @Override
+    public String getImageURL() {
+        return "./src/main/resources/images/right.png";
+    }
 }
