@@ -2,15 +2,17 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #AACCCC;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
+<BorderPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #AACCCC;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
     <top>
         <!--<Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0" />-->
         <ChoiceBox fx:id="levelBox" value="level">
@@ -18,55 +20,85 @@
     </top>
 
     <bottom>
-        <ScrollPane prefHeight="100" prefWidth="100" style="-fx-background-color: #000000;">
-            <Text fx:id="commandSeq"/>
+        <ScrollPane prefHeight="100" prefWidth="100">
+
+            <HBox fx:id="commandBox" prefHeight="200.0" prefWidth="1000.0">
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding></HBox>
+
+
         </ScrollPane>
     </bottom>
 
     <left>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="stepForwardButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddStepForwardAction" text="Step Forward">
+                <ImageView fx:id="forwardImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleAddStepForwardAction" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                      <Image url="@../images/forward.png" />
+                   </image>
+                   <VBox.margin>
+                      <Insets bottom="5.0" />
+                   </VBox.margin>
+                </ImageView>
+                <ImageView fx:id="leftImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleAddTurnLeftAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/left.png" />
+                    </image>
                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
+                        <Insets bottom="5.0" />
+                    </VBox.margin></ImageView>
+                <ImageView fx:id="rightImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleAddTurnRightAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/right.png" />
+                    </image>
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin></ImageView>
+                <ImageView fx:id="loopImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleLoopAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/loop.png" />
+                    </image>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></ImageView>
+                <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleRemoveLastCommandAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/last.png" />
+                    </image>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin></ImageView>
+                <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleClearCommandSequenceAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/clear.png" />
+                    </image>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></ImageView>
+                <ImageView fx:id="executeImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleExecuteCommandSequenceAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/run.png" />
+                    </image>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></ImageView>
 
-                <Button fx:id="turnLeftButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTurnLeftAction" text="Turn Left">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-
-                <Button fx:id="turnRightButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTurnRightAction" text="Turn Right">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-
-                <Button fx:id="removeLastCommandButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRemoveLastCommandAction" text="Remove last command">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-
-                <Button fx:id="clearButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearCommandSequenceAction" text="Clear">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-
-                <Button fx:id="executeButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleExecuteCommandSequenceAction" text="Execute">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-                <Button fx:id="resetButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleResetAction" text="Reset">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-                <Button fx:id="nextLevelButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleNextLevelAction" text="Next level">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
-                <Button fx:id="loopButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLoopAction" text="Loop">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </VBox.margin></Button>
+                <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleResetAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/reset.png" />
+                    </image>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></ImageView>
+                <ImageView fx:id="nextLevelImage" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#handleNextLevelAction" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/lvlup.png" />
+                    </image>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin></ImageView>
 
                 <Text fx:id="info" textAlignment="CENTER" wrappingWidth="150" />
 

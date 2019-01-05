@@ -1,7 +1,7 @@
 package game.controller;
 
 import game.model.Board;
-import game.model.CommandSequence;
+import game.model.command.CommandSequence;
 import game.model.MoveType;
 import game.model.command.ITurtleCommand;
 import game.model.command.StepForwardCommand;
@@ -14,16 +14,23 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -42,6 +49,9 @@ public class GameOverviewController {
     @FXML
     private Pane boardPane;
     @FXML
+    private HBox commandBox;
+
+    @FXML
     private Canvas boardCanvas;
     @FXML
     private Canvas turtleCanvas;
@@ -53,9 +63,17 @@ public class GameOverviewController {
     @FXML
     private Text info;
     @FXML
-    private Button nextLevelButton;
+    private ImageView forwardImage;
     @FXML
-    private Button executeButton;
+    private ImageView leftImage;
+    @FXML
+    private ImageView rightImage;
+    @FXML
+    private ImageView loopImage;
+    @FXML
+    private ImageView nextLevelImage;
+    @FXML
+    private ImageView executeImage;
     @FXML
     private ChoiceBox levelBox;
 
@@ -70,21 +88,18 @@ public class GameOverviewController {
             e.printStackTrace();
         }
         info.setText(GameAppController.lvl + "/5");
-        nextLevelButton.setVisible(false);
+        nextLevelImage.setVisible(false);
 
         for (int i=0; i<5; i++)
             levelBox.getItems().add("level " + String.format("%d", i+1));
         levelBox.getSelectionModel().select(GameAppController.lvl-1);
 
-        levelBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                GameAppController.lvl = t1.intValue()+1;
-                setData(DataGenerator.generateGameData(GameAppController.lvl));
-                commandSeq.setText("");
-                info.setText(GameAppController.lvl + "/5");
-                nextLevelButton.setVisible(false);
-            }
+        levelBox.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, t1) -> {
+            GameAppController.lvl = t1.intValue()+1;
+            setData(DataGenerator.generateGameData(GameAppController.lvl));
+            commandSeq.setText("");
+            info.setText(GameAppController.lvl + "/5");
+            nextLevelImage.setVisible(false);
         });
         // int selectedLvl = levelBox.getSelectionModel().getSelectedIndex();
 
@@ -99,46 +114,66 @@ public class GameOverviewController {
         return this.boardData;
     }
 
+    private void addCommandToBox(Image image){
+        ImageView imageToAdd = new ImageView();
+        imageToAdd.setFitHeight(50);
+        imageToAdd.setFitWidth(50);
+        imageToAdd.setImage(image);
+        imageToAdd.setVisible(true);
+        HBox container = new HBox();
+        container.paddingProperty().setValue(new Insets(0,5,5,0));
+        container.getChildren().add(imageToAdd);
+        commandBox.getChildren().addAll(container);
+    }
+
     @FXML
-    private void handleAddStepForwardAction(ActionEvent event) {
+    private void handleAddStepForwardAction(Event event) {
         commandSequence.addCommand(new StepForwardCommand(boardData));
-        commandSeq.setText(commandSeq.getText() + "F\n");
+//        commandSeq.setText(commandSeq.getText() + "F\n");
         System.out.println("Step forward event fired.");
+        addCommandToBox(forwardImage.getImage());
     }
 
     @FXML
-    private void handleAddTurnLeftAction(ActionEvent event) {
+    private void handleAddTurnLeftAction(Event event) {
         commandSequence.addCommand(new TurnLeftCommand(boardData));
-        commandSeq.setText(commandSeq.getText() + "L\n");
+//        commandSeq.setText(commandSeq.getText() + "L\n");
         System.out.println("Turn left event fired.");
+        addCommandToBox(leftImage.getImage());
     }
 
     @FXML
-    private void handleAddTurnRightAction(ActionEvent event) {
+    private void handleAddTurnRightAction(Event event) {
         commandSequence.addCommand(new TurnRightCommand(boardData));
-        commandSeq.setText(commandSeq.getText() + "R\n");
+//        commandSeq.setText(commandSeq.getText() + "R\n");
         System.out.println("Turn right event fired.");
+        addCommandToBox(rightImage.getImage());
     }
 
     @FXML
-    private void handleRemoveLastCommandAction(ActionEvent event) {
+    private void handleRemoveLastCommandAction(Event event) {
         if (commandSequence.getSize() > 0) {
             commandSequence.removeLastCommand();
-            commandSeq.setText(commandSeq.getText().substring(0, commandSeq.getText().length() - 2));
+//            commandSeq.setText(commandSeq.getText().substring(0, commandSeq.getText().length() - 2));
+            commandBox.getChildren().remove(commandSequence.getSize());
         }
         System.out.println("Remove last command event fired.");
+
     }
 
     @FXML
-    private void handleClearCommandSequenceAction(ActionEvent event) {
+    private void handleClearCommandSequenceAction(Event event) {
+        commandBox.getChildren().remove(0,commandSequence.getSize());
         commandSequence.clear();
-        commandSeq.setText("");
+
+//        commandSeq.setText("");
         System.out.println("Clear sequence event fired.");
     }
 
     @FXML
-    private void handleExecuteCommandSequenceAction(ActionEvent event) {
-        executeButton.setDisable(true);
+    private void handleExecuteCommandSequenceAction(Event event) {
+        executeImage.setOnMouseClicked(null);
+        executeImage.setOpacity(0);
         int startX = boardData.getTurtle().getX();
         int startY = boardData.getTurtle().getY();
         info.setText(commandSequence.execute());
@@ -147,34 +182,37 @@ public class GameOverviewController {
         gc_turtle.fillRect(0, 0, boardCanvas.getHeight(), boardCanvas.getWidth());
         animate(boardData.getTurtle().getMemory(), startX, startY);
         boardData.getTurtle().wipeMemory();
-        if (info.getText().equals("Great! :)"))
-            nextLevelButton.setVisible(true);
+        if (info.getText().equals("Great! :)")) {
+            nextLevelImage.setVisible(true);
+        }
     }
 
     @FXML
-    private void handleResetAction(ActionEvent event) {
-        executeButton.setDisable(false);
+    private void handleResetAction(Event event) {
+        executeImage.setOnMouseClicked(this::handleExecuteCommandSequenceAction);
+        executeImage.setOpacity(100);
         System.out.println("Reset event fired.");
         setData(DataGenerator.generateGameData(GameAppController.lvl));
-        commandSeq.setText("");
+//        commandSeq.setText("");
         info.setText(GameAppController.lvl + "/5");
         boardData.getTurtle().wipeMemory();
     }
 
     @FXML
-    private void handleNextLevelAction(ActionEvent event) {
-        executeButton.setDisable(false);
+    private void handleNextLevelAction(Event event) {
+        executeImage.setOnMouseClicked(this::handleExecuteCommandSequenceAction);
+        executeImage.setOpacity(100);
         System.out.println("Next level event fired.");
         if (GameAppController.lvl < 5) GameAppController.lvl++;
         setData(DataGenerator.generateGameData(GameAppController.lvl));
-        commandSeq.setText("");
+//        commandSeq.setText("");
         info.setText(GameAppController.lvl + "/5");
-        nextLevelButton.setVisible(false);
+        nextLevelImage.setVisible(false);
         levelBox.getSelectionModel().select(GameAppController.lvl-1);
     }
 
     @FXML
-    private void handleLoopAction(ActionEvent event) {
+    private void handleLoopAction(Event event) {
         String loopseq = "";
         appController.showLoopDialog();
 
