@@ -34,7 +34,7 @@ public class DataGenerator {
         return statJSON.getInt("unlocked");
     }
 
-    public final static void unlockLevel(Integer level){
+    public final static boolean unlockLevel(Integer level){
         JSONObject statJSON = getStats();
         if (statJSON.getInt("unlocked")<level){
             statJSON.remove("unlocked");
@@ -44,7 +44,8 @@ public class DataGenerator {
             } catch (IOException ex){
                 ex.printStackTrace();
             }
-        }
+            return true;
+        } else return false;
     }
 
     public final static Board generateGameData(int lvl) {

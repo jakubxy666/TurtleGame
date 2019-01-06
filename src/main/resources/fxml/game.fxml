@@ -4,6 +4,7 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -15,8 +16,10 @@
 <BorderPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #AACCCC;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverviewController">
     <top>
         <!--<Label alignment="BASELINE_CENTER" prefHeight="60" prefWidth="800" style="-fx-border-style: solid; -fx-border-width: 0 0 1 0" />-->
-        <ChoiceBox fx:id="levelBox" value="level">
-        </ChoiceBox>
+        <ChoiceBox fx:id="levelBox" minHeight="60.0" minWidth="60.0" value="level">
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="200.0" right="200.0" top="20.0" />
+         </BorderPane.margin></ChoiceBox>
     </top>
 
     <bottom>
@@ -41,6 +44,9 @@
                    <VBox.margin>
                       <Insets bottom="5.0" />
                    </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect>
                 </ImageView>
                 <ImageView fx:id="leftImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleAddTurnLeftAction" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -48,42 +54,60 @@
                     </image>
                     <VBox.margin>
                         <Insets bottom="5.0" />
-                    </VBox.margin></ImageView>
+                    </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
                 <ImageView fx:id="rightImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleAddTurnRightAction" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../images/right.png" />
                     </image>
                     <VBox.margin>
                         <Insets bottom="5.0" />
-                    </VBox.margin></ImageView>
+                    </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
                 <ImageView fx:id="loopImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleLoopAction" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../images/loop.png" />
                     </image>
                <VBox.margin>
                   <Insets bottom="5.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
                 <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleRemoveLastCommandAction" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../images/last.png" />
                     </image>
                <VBox.margin>
                   <Insets bottom="5.0" top="10.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
                 <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleClearCommandSequenceAction" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../images/clear.png" />
                     </image>
                <VBox.margin>
                   <Insets bottom="5.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
                 <ImageView fx:id="executeImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleExecuteCommandSequenceAction" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../images/run.png" />
                     </image>
                <VBox.margin>
                   <Insets bottom="5.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
 
                 <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#handleResetAction" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -91,14 +115,20 @@
                     </image>
                <VBox.margin>
                   <Insets bottom="5.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
                 <ImageView fx:id="nextLevelImage" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#handleNextLevelAction" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../images/lvlup.png" />
                     </image>
                <VBox.margin>
                   <Insets top="15.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
 
                 <Text fx:id="info" textAlignment="CENTER" wrappingWidth="150" />
 
@@ -110,11 +140,14 @@
     </left>
 
     <center>
-        <Pane fx:id="boardPane" maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0">
+        <Pane fx:id="boardPane" maxHeight="540.0" maxWidth="540.0" prefHeight="540.0" prefWidth="540.0">
             <children>
-                <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
-                <Canvas fx:id="turtleCanvas" height="500.0" width="500.0" />
+                <Canvas fx:id="boardCanvas" height="540.0" width="540.0" />
+                <Canvas fx:id="turtleCanvas" height="540.0" width="540.0" />
             </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
         </Pane>
     </center>
 </BorderPane>
