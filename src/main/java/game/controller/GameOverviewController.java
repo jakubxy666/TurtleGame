@@ -8,6 +8,7 @@ import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.SnapshotParameters;
@@ -18,6 +19,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -74,6 +76,54 @@ public class GameOverviewController {
 
     @FXML
     private void initialize() {
+
+        ImageView[] commandImages = {forwardImage,leftImage,rightImage,loopImage};
+
+        for (ImageView iv : commandImages){
+            iv.setOnDragDetected(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Dragboard db = iv.startDragAndDrop(TransferMode.ANY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(iv.getImage());
+                    db.setContent(content);
+                    event.consume();
+                }
+            });
+
+            iv.setOnDragDone(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    if(event.getAcceptedTransferMode()!=null){
+                        iv.getOnMouseClicked().handle(null);
+                    }
+                }
+            });
+        }
+
+
+        commandBox.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if( db.hasImage()){
+                    event.setDropCompleted(true);
+                }
+            }
+        });
+
+        commandBox.setOnDragOver(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+
+                if (event.getGestureSource() != commandBox &&
+                        event.getDragboard().hasImage()) {
+
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+
+                event.consume();
+            }
+        });
 
 
         //get graphic contexts for board layers
@@ -336,14 +386,18 @@ public class GameOverviewController {
 
     public void animate(LinkedList<MoveType> steps, int startX, int startY) {
 
+        //prepare starting coordinates on canvas
         DoubleProperty x = new SimpleDoubleProperty(border + startX * fieldSize + 0.15*fieldSize);
         DoubleProperty y = new SimpleDoubleProperty(border + startY * fieldSize + 0.15*fieldSize);
         DoubleProperty r = new SimpleDoubleProperty(0);
         SequentialTransition s = new SequentialTransition();
 
+        //copy to ending coordinates
         int xEnd = x.intValue(), yEnd = y.intValue(), rEnd = r.intValue();
 
         for (MoveType step : steps) {
+
+            //determine the offset
             switch (step) {
                 case Up:
                     yEnd -= fieldSize;
@@ -365,13 +419,17 @@ public class GameOverviewController {
                     break;
             }
 
+            //create keyvalues for animation
             KeyValue px = new KeyValue(x, xEnd);
             KeyValue py = new KeyValue(y, yEnd);
             KeyValue pr = new KeyValue(r, rEnd);
+
+            //create an animation for the step
             KeyFrame kf = new KeyFrame(Duration.seconds(0.5), px, py, pr);
+
+            //create a timeline from the animation and add it to sequence with a pause
             Timeline t = new Timeline(kf);
             Timeline pause = new Timeline(new KeyFrame(Duration.seconds(0.2)));
-
             s.getChildren().addAll(t, pause);
 
         }
@@ -379,26 +437,35 @@ public class GameOverviewController {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
 
+                //clear the turtle layer
                 gc_turtle.clearRect(0, 0, turtleCanvas.getWidth(), turtleCanvas.getHeight());
 
+                //visit a field that the turtle is on roght now
                 visitField((int) (x.intValue() / fieldSize), (int) (y.intValue() / fieldSize));
 
+                //rotate the turtle image if needed
                 turtleImage.setRotate(r.doubleValue());
                 double width = sin(toRadians(abs(r.doubleValue()) % 90)) + cos(toRadians(abs(r.doubleValue()) % 90));
                 double margin = (0.70*fieldSize * width - 0.70*fieldSize) / 2;
+
+                //draw the turtle
                 gc_turtle.setEffect(shadow);
                 gc_turtle.drawImage(turtleImage.snapshot(params, null), x.intValue() - margin, y.intValue() - margin, 0.70*fieldSize * width, 0.70*fieldSize * width);
                 gc_turtle.setEffect(null);
             }
         };
 
+        //on sequence finish, stop the timer
         s.setOnFinished(event -> {
             timer.stop();
             //what to do after animation ends
         });
+
+        //start the timer and animation
         timer.start();
         s.play();
     }
@@ -407,9 +474,7 @@ public class GameOverviewController {
         this.boardData = board;
         this.commandSequence = new CommandSequence(board);
         fieldSize = (boardCanvas.getWidth() - 2*border) / board.getBoardSize();
-
         turtleImage.setRotate(0);
-
         gc_turtle.clearRect(0, 0, boardCanvas.getWidth(), boardCanvas.getHeight());
         gc_board.clearRect(0, 0, boardCanvas.getWidth(), boardCanvas.getHeight());
         drawBoard();
