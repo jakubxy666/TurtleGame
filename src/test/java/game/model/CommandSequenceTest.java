@@ -1,5 +1,6 @@
 package game.model;
 
+import game.model.command.CommandSequence;
 import game.model.command.ITurtleCommand;
 import org.junit.Before;
 import org.junit.Test;
