@@ -36,7 +36,6 @@ public class CommandSequence {
         boolean allCommandsOk = true;
         for (ITurtleCommand com : commands) {
             if (!com.execute()) allCommandsOk = false;
-            // update view here!
         }
         if (!allCommandsOk)
             return "Fail :( \n You tried to make impossible move. (There is no way)";
