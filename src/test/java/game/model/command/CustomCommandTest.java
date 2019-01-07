@@ -23,7 +23,7 @@ public class CustomCommandTest {
     @Test
     public void testExecute() {
         // Setup
-        final boolean expectedResult = true;
+        final boolean expectedResult = false;
 
         // Run the test
         final boolean result = customCommandUnderTest.execute();

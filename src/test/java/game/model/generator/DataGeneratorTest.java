@@ -32,18 +32,4 @@ public class DataGeneratorTest {
         // Verify the results
         assertEquals(expectedResult, result);
     }
-
-    @Test
-    public void testGenerateGameData() {
-        // Setup
-        final int lvl = 0;
-        final Board board = null;
-        final Board expectedResult = null;
-
-        // Run the test
-        final Board result = DataGenerator.generateGameData(lvl, board);
-
-        // Verify the results
-        assertEquals(expectedResult, result);
-    }
 }
