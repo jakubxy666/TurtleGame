@@ -1,31 +1,32 @@
 package game.controller;
 
 import game.model.Board;
-import game.model.CommandSequence;
+import game.model.command.*;
 import game.model.MoveType;
-import game.model.command.ITurtleCommand;
-import game.model.command.StepForwardCommand;
-import game.model.command.TurnLeftCommand;
-import game.model.command.TurnRightCommand;
 import game.model.generator.DataGenerator;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
@@ -42,147 +43,376 @@ public class GameOverviewController {
     @FXML
     private Pane boardPane;
     @FXML
+    private HBox commandBox;
+    @FXML
+    private VBox customCommandsBox;
+
+    @FXML
     private Canvas boardCanvas;
     @FXML
     private Canvas turtleCanvas;
     private GraphicsContext gc_board, gc_turtle;
-    private ImageView fxImage;
+    private ImageView turtleImage;
 
-    @FXML
-    private Text commandSeq;
+    //    @FXML
+//    private Text commandSeq;
     @FXML
     private Text info;
     @FXML
-    private Button nextLevelButton;
+    private ImageView forwardImage;
     @FXML
-    private Button executeButton;
+    private ImageView leftImage;
+    @FXML
+    private ImageView rightImage;
+    @FXML
+    private ImageView loopImage;
+    @FXML
+    private ImageView nextLevelImage;
+    @FXML
+    private ImageView executeImage;
+    @FXML
+    private ImageView customCommand;
     @FXML
     private ChoiceBox levelBox;
+    double fieldSize, border, padding;
+
+    private Effect shadow = new DropShadow(20, 2, 2, Color.BLACK);
+
 
     @FXML
     private void initialize() {
+
+        ImageView[] commandImages = {forwardImage,leftImage,rightImage,loopImage};
+
+        for (ImageView iv : commandImages){
+            iv.setOnDragDetected(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Dragboard db = iv.startDragAndDrop(TransferMode.ANY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(iv.getImage());
+                    db.setContent(content);
+                    event.consume();
+                }
+            });
+
+            iv.setOnDragDone(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    if(event.getAcceptedTransferMode()!=null){
+                        iv.getOnMouseClicked().handle(null);
+                    }
+                }
+            });
+        }
+
+
+        commandBox.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if( db.hasImage()){
+                    event.setDropCompleted(true);
+                }
+            }
+        });
+
+        commandBox.setOnDragOver(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+
+                if (event.getGestureSource() != commandBox &&
+                        event.getDragboard().hasImage()) {
+
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+
+                event.consume();
+            }
+        });
+
+
+        //get graphic contexts for board layers
         gc_board = boardCanvas.getGraphicsContext2D();
         gc_turtle = turtleCanvas.getGraphicsContext2D();
         turtleCanvas.toFront();
+
+        //variables for drawing the board
+
+        border = 20;
+        padding = 5;
+        fieldSize = boardCanvas.getWidth() - 2*border;
+
+        //get turtle image
         try {
-            fxImage = new ImageView(new Image(new FileInputStream("./src/main/resources/images/turtle.png")));
+            turtleImage = new ImageView(new Image(new FileInputStream("./src/main/resources/images/turtle.png")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         info.setText(GameAppController.lvl + "/5");
-        nextLevelButton.setVisible(false);
 
-        for (int i=0; i<5; i++)
-            levelBox.getItems().add("level " + String.format("%d", i+1));
-        levelBox.getSelectionModel().select(GameAppController.lvl-1);
+        //disable next level image
+        nextLevelImage.setVisible(false);
 
-        levelBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                GameAppController.lvl = t1.intValue()+1;
-                setData(DataGenerator.generateGameData(GameAppController.lvl));
-                commandSeq.setText("");
-                info.setText(GameAppController.lvl + "/5");
-                nextLevelButton.setVisible(false);
-            }
+        //populate level selector
+        for (int i = 0; i < DataGenerator.getHighestUnlocked(); i++)
+            levelBox.getItems().add("level " + String.format("%d", i + 1));
+        levelBox.getSelectionModel().select(GameAppController.lvl - 1);
+
+        //add a listener function for changing the selected level
+        levelBox.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, t1) -> {
+            GameAppController.lvl = t1.intValue() + 1;
+            setData(DataGenerator.generateGameData(GameAppController.lvl));
+//            commandSeq.setText("");
+            info.setText(GameAppController.lvl + "/5");
+            nextLevelImage.setVisible(false);
         });
         // int selectedLvl = levelBox.getSelectionModel().getSelectedIndex();
 
     }
 
-    public void addCommand(ITurtleCommand command){
+    public void addCommand(ITurtleCommand command) {
         commandSequence.addCommand(command);
-        commandSeq.setText(commandSeq.getText() + command.getName());
+//        commandSeq.setText(commandSeq.getText() + command.getName());
     }
 
-    public Board getBoardData(){
+    public Board getBoardData() {
         return this.boardData;
     }
 
+
+
     @FXML
-    private void handleAddStepForwardAction(ActionEvent event) {
+    private void handleAddCustomCommandAction(Event event){
+        //todo
+        CustomCommand customCommand = new CustomCommand(commandSequence.getCommands());
+
+        ImageView customCommandImage = new ImageView(turtleImage.getImage());
+        customCommandImage.setFitWidth(50);
+        customCommandImage.setFitHeight(50);
+        customCommandImage.setEffect(shadow);
+
+        customCommandImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                addCommandToBox(customCommandImage.getImage());
+                addCommand(customCommand);
+            }
+        });
+
+        customCommandsBox.getChildren().addAll(customCommandImage);
+    }
+
+    @FXML
+    private void handleAddStepForwardAction(Event event) { //
         commandSequence.addCommand(new StepForwardCommand(boardData));
-        commandSeq.setText(commandSeq.getText() + "F\n");
+//        commandSeq.setText(commandSeq.getText() + "F\n");
         System.out.println("Step forward event fired.");
+        addCommandToBox(forwardImage.getImage());
     }
 
     @FXML
-    private void handleAddTurnLeftAction(ActionEvent event) {
+    private void handleAddTurnLeftAction(Event event) {
         commandSequence.addCommand(new TurnLeftCommand(boardData));
-        commandSeq.setText(commandSeq.getText() + "L\n");
+//        commandSeq.setText(commandSeq.getText() + "L\n");
         System.out.println("Turn left event fired.");
+        addCommandToBox(leftImage.getImage());
     }
 
     @FXML
-    private void handleAddTurnRightAction(ActionEvent event) {
+    private void handleAddTurnRightAction(Event event) {
         commandSequence.addCommand(new TurnRightCommand(boardData));
-        commandSeq.setText(commandSeq.getText() + "R\n");
+//        commandSeq.setText(commandSeq.getText() + "R\n");
         System.out.println("Turn right event fired.");
+        addCommandToBox(rightImage.getImage());
     }
 
     @FXML
-    private void handleRemoveLastCommandAction(ActionEvent event) {
+    private void handleRemoveLastCommandAction(Event event) {
         if (commandSequence.getSize() > 0) {
             commandSequence.removeLastCommand();
-            commandSeq.setText(commandSeq.getText().substring(0, commandSeq.getText().length() - 2));
+//            commandSeq.setText(commandSeq.getText().substring(0, commandSeq.getText().length() - 2));
+            commandBox.getChildren().remove(commandSequence.getSize());
         }
         System.out.println("Remove last command event fired.");
+
     }
 
     @FXML
-    private void handleClearCommandSequenceAction(ActionEvent event) {
+    private void handleClearCommandSequenceAction(Event event) {
+        commandBox.getChildren().clear();
         commandSequence.clear();
-        commandSeq.setText("");
+//        commandSeq.setText("");
         System.out.println("Clear sequence event fired.");
     }
 
     @FXML
-    private void handleExecuteCommandSequenceAction(ActionEvent event) {
-        executeButton.setDisable(true);
+    private void handleExecuteCommandSequenceAction(Event event) {
+        //disable execution and set opacity to 0 for its button
+        executeImage.setOnMouseClicked(null);
+        executeImage.setOpacity(0);
+
+        //get starting position before changes in model
         int startX = boardData.getTurtle().getX();
         int startY = boardData.getTurtle().getY();
         info.setText(commandSequence.execute());
         System.out.println("Execute event fired.");
+
+        //clear the turtle layer
         gc_turtle.setFill(Color.TRANSPARENT);
         gc_turtle.fillRect(0, 0, boardCanvas.getHeight(), boardCanvas.getWidth());
+
+        //animate the movements and wipe turtle memory afterwards
         animate(boardData.getTurtle().getMemory(), startX, startY);
         boardData.getTurtle().wipeMemory();
-        if (info.getText().equals("Great! :)"))
-            nextLevelButton.setVisible(true);
+
+        //TODO
+        //winning condition check
+        if (info.getText().equals("Great! :)")) {
+            nextLevelImage.setVisible(true);
+        }
     }
 
     @FXML
-    private void handleResetAction(ActionEvent event) {
-        executeButton.setDisable(false);
+    private void handleResetAction(Event event) {
+
+        //revet execute button to its original state
+        executeImage.setOnMouseClicked(this::handleExecuteCommandSequenceAction);
+        executeImage.setOpacity(100);
         System.out.println("Reset event fired.");
+
+        //reset data and wipe turtle memory
         setData(DataGenerator.generateGameData(GameAppController.lvl));
-        commandSeq.setText("");
-        info.setText(GameAppController.lvl + "/5");
         boardData.getTurtle().wipeMemory();
-    }
-
-    @FXML
-    private void handleNextLevelAction(ActionEvent event) {
-        executeButton.setDisable(false);
-        System.out.println("Next level event fired.");
-        if (GameAppController.lvl < 5) GameAppController.lvl++;
-        setData(DataGenerator.generateGameData(GameAppController.lvl));
-        commandSeq.setText("");
+        commandBox.getChildren().clear();
+//        commandSeq.setText("");
         info.setText(GameAppController.lvl + "/5");
-        nextLevelButton.setVisible(false);
-        levelBox.getSelectionModel().select(GameAppController.lvl-1);
+
     }
 
     @FXML
-    private void handleLoopAction(ActionEvent event) {
-        String loopseq = "";
+    private void handleNextLevelAction(Event event) {
+        System.out.println("Next level event fired.");
+
+        //revert execute button to its original state
+        executeImage.setOnMouseClicked(this::handleExecuteCommandSequenceAction);
+        executeImage.setOpacity(100);
+
+        //increase level number and unlock the next one, add unlocked level to choicebox
+        if (GameAppController.lvl < 5) GameAppController.lvl++;
+        if (DataGenerator.unlockLevel(GameAppController.lvl)) {
+            levelBox.getItems().add("level " + String.format("%d", GameAppController.lvl));
+        }
+
+        //load next level
+        setData(DataGenerator.generateGameData(GameAppController.lvl));
+//        commandSeq.setText("");
+        info.setText(GameAppController.lvl + "/5");
+
+        //disable next level button
+        nextLevelImage.setVisible(false);
+        levelBox.getSelectionModel().select(GameAppController.lvl - 1);
+        commandBox.getChildren().clear();
+    }
+
+    @FXML
+    private void handleLoopAction(Event event) {
         appController.showLoopDialog();
+    }
+
+    private void addCommandToBox(Image image) {
+        //prepare ImageView
+        ImageView imageToAdd = new ImageView();
+        imageToAdd.setEffect(shadow);
+        imageToAdd.setFitHeight(50);
+        imageToAdd.setFitWidth(50);
+        imageToAdd.setImage(image);
+        imageToAdd.setVisible(true);
+
+        //prepare container for ImageView, set padding and insert image
+        HBox container = new HBox();
+        container.setPadding(new Insets(0, 5, 5, 0));
+        container.getChildren().add(imageToAdd);
+
+
+        //add command image to commandBox
+        commandBox.getChildren().addAll(container);
+
+        //on click delete
+        container.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                HBox c = (HBox) event.getSource();
+                int index = c.getParent().getChildrenUnmodifiable().indexOf(c);
+
+                commandSequence.removeCommand(index);
+                commandBox.getChildren().remove(c);
+            }
+        });
+    }
+
+
+    public void addLoopToBox(LoopCommand loop) {
+        try { //loopBox - box to add to commands
+
+            //preparing loopBox
+            HBox loopBox = new HBox();
+            loopBox.setEffect(shadow);
+            loopBox.setMaxHeight(50);
+            loopBox.setPadding(new Insets(5, 5, 5, 5));
+            loopBox.setStyle("-fx-background-color: #b40093;");
+
+            //for every command in loop, get its image, create a container with padding
+            // and add it to loopBox
+            for (ITurtleCommand command : loop.getCommands()) {
+                HBox container = new HBox();
+                container.setPadding(new Insets(0, 5, 0, 0));
+                Image i = new Image(new FileInputStream(command.getImageURL()));
+                ImageView imageToAdd = new ImageView();
+                imageToAdd.setEffect(new DropShadow(5,Color.BLACK));
+                imageToAdd.setFitWidth(40);
+                imageToAdd.setFitHeight(40);
+                imageToAdd.setImage(i);
+                imageToAdd.setVisible(true);
+                container.getChildren().add(imageToAdd);
+                loopBox.getChildren().add(container);
+            }
+
+            //add iterations number to loopBox
+            Text iters = new Text(" " + loop.getIterations().toString());
+            iters.setTextAlignment(TextAlignment.CENTER);
+            iters.setFont(new Font(30));
+            iters.setFill(Color.WHITE);
+            iters.setEffect(new DropShadow(5,Color.BLACK));
+            loopBox.getChildren().add(iters);
+
+            loopBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    HBox c = (HBox) event.getSource();
+                    int index = c.getParent().getChildrenUnmodifiable().indexOf(c);
+
+                    commandSequence.removeCommand(index);
+                    commandBox.getChildren().remove(c);
+                }
+            });
+
+            //add loopBox to commandBox
+            commandBox.getChildren().add(loopBox);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
+
+
 
     public void visitField(int x, int y) {
         gc_board.setFill(Color.BLUE);
-        gc_board.fillRect(100 * x + 5, 100 * y + 5, 100 - 10, 100 - 10);
+        gc_board.fillRect(border + fieldSize * x + padding,
+                border + fieldSize * y + padding,
+                fieldSize - 2 * padding,
+                fieldSize - 2 * padding);
     }
 
     public void drawBoard() {
@@ -192,10 +422,13 @@ public class GameOverviewController {
         for (int i = 0; i < boardData.getFields().length; i++) {
             for (int j = 0; j < boardData.getFields().length; j++) {
                 if (boardData.getFields()[j][i].isVisible()) {
-                    gc_board.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
-
+                    gc_board.setEffect(shadow);
                     gc_board.setFill(Color.BROWN);
-                    gc_board.fillRect(100 * i + 5, 100 * j + 5, 100 - 10, 100 - 10);
+                    gc_board.fillRect(
+                            border + fieldSize * i + padding,
+                            border + fieldSize * j + padding,
+                            fieldSize - 2 * padding,
+                            fieldSize - 2 * padding);
                     gc_board.setEffect(null);
                 }
             }
@@ -205,26 +438,30 @@ public class GameOverviewController {
 
     public void animate(LinkedList<MoveType> steps, int startX, int startY) {
 
-        DoubleProperty x = new SimpleDoubleProperty(startX * 100 + 15);
-        DoubleProperty y = new SimpleDoubleProperty(startY * 100 + 15);
+        //prepare starting coordinates on canvas
+        DoubleProperty x = new SimpleDoubleProperty(border + startX * fieldSize + 0.15*fieldSize);
+        DoubleProperty y = new SimpleDoubleProperty(border + startY * fieldSize + 0.15*fieldSize);
         DoubleProperty r = new SimpleDoubleProperty(0);
         SequentialTransition s = new SequentialTransition();
 
+        //copy to ending coordinates
         int xEnd = x.intValue(), yEnd = y.intValue(), rEnd = r.intValue();
 
         for (MoveType step : steps) {
+
+            //determine the offset
             switch (step) {
                 case Up:
-                    yEnd -= 100;
+                    yEnd -= fieldSize;
                     break;
                 case Down:
-                    yEnd += 100;
+                    yEnd += fieldSize;
                     break;
                 case Left:
-                    xEnd -= 100;
+                    xEnd -= fieldSize;
                     break;
                 case Right:
-                    xEnd += 100;
+                    xEnd += fieldSize;
                     break;
                 case RLeft:
                     rEnd -= 90;
@@ -234,40 +471,53 @@ public class GameOverviewController {
                     break;
             }
 
+            //create keyvalues for animation
             KeyValue px = new KeyValue(x, xEnd);
             KeyValue py = new KeyValue(y, yEnd);
             KeyValue pr = new KeyValue(r, rEnd);
+
+            //create an animation for the step
             KeyFrame kf = new KeyFrame(Duration.seconds(0.5), px, py, pr);
+
+            //create a timeline from the animation and add it to sequence with a pause
             Timeline t = new Timeline(kf);
             Timeline pause = new Timeline(new KeyFrame(Duration.seconds(0.2)));
-
-            s.getChildren().addAll(t,pause);
+            s.getChildren().addAll(t, pause);
 
         }
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+
                 SnapshotParameters params = new SnapshotParameters();
                 params.setFill(Color.TRANSPARENT);
 
+                //clear the turtle layer
                 gc_turtle.clearRect(0, 0, turtleCanvas.getWidth(), turtleCanvas.getHeight());
 
-                visitField(x.intValue() / 100, y.intValue() / 100);
+                //visit a field that the turtle is on roght now
+                visitField((int) (x.intValue() / fieldSize), (int) (y.intValue() / fieldSize));
 
-                fxImage.setRotate(r.doubleValue());
+                //rotate the turtle image if needed
+                turtleImage.setRotate(r.doubleValue());
                 double width = sin(toRadians(abs(r.doubleValue()) % 90)) + cos(toRadians(abs(r.doubleValue()) % 90));
-                double margin = (70 * width - 70) / 2;
-                gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
-                gc_turtle.drawImage(fxImage.snapshot(params, null), x.intValue() - margin, y.intValue() - margin, 70 * width, 70 * width);
+                double margin = (0.70*fieldSize * width - 0.70*fieldSize) / 2;
+
+                //draw the turtle
+                gc_turtle.setEffect(shadow);
+                gc_turtle.drawImage(turtleImage.snapshot(params, null), x.intValue() - margin, y.intValue() - margin, 0.70*fieldSize * width, 0.70*fieldSize * width);
                 gc_turtle.setEffect(null);
             }
         };
 
+        //on sequence finish, stop the timer
         s.setOnFinished(event -> {
             timer.stop();
             //what to do after animation ends
         });
+
+        //start the timer and animation
         timer.start();
         s.play();
     }
@@ -275,16 +525,20 @@ public class GameOverviewController {
     public void setData(Board board) {
         this.boardData = board;
         this.commandSequence = new CommandSequence(board);
-
-        fxImage.setRotate(0);
-
-        gc_turtle.clearRect(0,0,boardCanvas.getWidth(),boardCanvas.getHeight());
-        gc_board.clearRect(0,0,boardCanvas.getWidth(),boardCanvas.getHeight());
+        fieldSize = (boardCanvas.getWidth() - 2*border) / board.getBoardSize();
+        turtleImage.setRotate(0);
+        gc_turtle.clearRect(0, 0, boardCanvas.getWidth(), boardCanvas.getHeight());
+        gc_board.clearRect(0, 0, boardCanvas.getWidth(), boardCanvas.getHeight());
         drawBoard();
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT);
-        gc_turtle.setEffect(new DropShadow(20, 2, 2, Color.BLACK));
-        gc_turtle.drawImage(fxImage.snapshot(params, null), 100 * boardData.getTurtle().getX() + 15, 100 * boardData.getTurtle().getY() + 15, 70, 70);
+        gc_turtle.setEffect(shadow);
+        gc_turtle.drawImage(turtleImage.snapshot(params, null),
+                border + fieldSize * boardData.getTurtle().getX() + 0.15 * fieldSize,
+                border + fieldSize * boardData.getTurtle().getY() + 0.15 * fieldSize,
+                0.70 * fieldSize,
+                0.70 * fieldSize);
+        gc_turtle.setEffect(null);
     }
 
     public void setAppController(GameAppController appController) {

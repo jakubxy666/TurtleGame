@@ -30,5 +30,16 @@ public class LoopCommand implements ITurtleCommand {
         return result + ")";
     }
 
+    @Override
+    public String getImageURL() {
+        return "./src/main/resources/images/loop.png";
+    }
 
+    public Integer getIterations(){
+        return iterations;
+    }
+
+    public List<ITurtleCommand> getCommands(){
+        return this.commands;
+    }
 }

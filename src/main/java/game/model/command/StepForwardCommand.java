@@ -5,6 +5,8 @@ import game.model.BoardField;
 import game.model.Turtle;
 import game.model.command.ITurtleCommand;
 
+import java.awt.*;
+
 public class StepForwardCommand implements ITurtleCommand {
 
     private Board board;
@@ -53,5 +55,10 @@ public class StepForwardCommand implements ITurtleCommand {
     @Override
     public String getName() {
         return "Forward";
+    }
+
+    @Override
+    public String getImageURL() {
+        return "./src/main/resources/images/forward.png";
     }
 }
