@@ -62,7 +62,7 @@ public class DataGenerator {
         int turtleY = lvlJSON.getInt("turtleY");
         String turtleOrientation = lvlJSON.getString("turtleOrientation");
 
-        JSONArray avaliableMovesJSON = lvlJSON.getJSONArray("avaliableMoves");
+        JSONArray avaliableMovesJSON = lvlJSON.getJSONArray("commands");
         List avaliableMoves = avaliableMovesJSON.toList();
 
         JSONArray fieldsInfoJSON = lvlJSON.getJSONArray("fieldsInfo");
