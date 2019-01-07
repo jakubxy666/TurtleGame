@@ -11,6 +11,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -43,6 +44,8 @@ public class GameOverviewController {
     private Pane boardPane;
     @FXML
     private HBox commandBox;
+    @FXML
+    private VBox customCommandsBox;
 
     @FXML
     private Canvas boardCanvas;
@@ -67,6 +70,8 @@ public class GameOverviewController {
     private ImageView nextLevelImage;
     @FXML
     private ImageView executeImage;
+    @FXML
+    private ImageView customCommand;
     @FXML
     private ChoiceBox levelBox;
     double fieldSize, border, padding;
@@ -175,6 +180,28 @@ public class GameOverviewController {
     }
 
 
+
+    @FXML
+    private void handleAddCustomCommandAction(Event event){
+        //todo
+        CustomCommand customCommand = new CustomCommand(commandSequence.getCommands());
+
+        ImageView customCommandImage = new ImageView(turtleImage.getImage());
+        customCommandImage.setFitWidth(50);
+        customCommandImage.setFitHeight(50);
+        customCommandImage.setEffect(shadow);
+
+        customCommandImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                addCommandToBox(customCommandImage.getImage());
+                addCommand(customCommand);
+            }
+        });
+
+        customCommandsBox.getChildren().addAll(customCommandImage);
+    }
 
     @FXML
     private void handleAddStepForwardAction(Event event) { //
@@ -307,9 +334,23 @@ public class GameOverviewController {
         container.setPadding(new Insets(0, 5, 5, 0));
         container.getChildren().add(imageToAdd);
 
+
         //add command image to commandBox
         commandBox.getChildren().addAll(container);
+
+        //on click delete
+        container.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                HBox c = (HBox) event.getSource();
+                int index = c.getParent().getChildrenUnmodifiable().indexOf(c);
+
+                commandSequence.removeCommand(index);
+                commandBox.getChildren().remove(c);
+            }
+        });
     }
+
 
     public void addLoopToBox(LoopCommand loop) {
         try { //loopBox - box to add to commands
@@ -344,6 +385,17 @@ public class GameOverviewController {
             iters.setFill(Color.WHITE);
             iters.setEffect(new DropShadow(5,Color.BLACK));
             loopBox.getChildren().add(iters);
+
+            loopBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    HBox c = (HBox) event.getSource();
+                    int index = c.getParent().getChildrenUnmodifiable().indexOf(c);
+
+                    commandSequence.removeCommand(index);
+                    commandBox.getChildren().remove(c);
+                }
+            });
 
             //add loopBox to commandBox
             commandBox.getChildren().add(loopBox);

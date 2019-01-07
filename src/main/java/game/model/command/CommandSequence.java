@@ -25,6 +25,14 @@ public class CommandSequence {
             System.out.println("Size is zero");
     }
 
+    public void removeCommand(int index){
+        commands.remove(index);
+    }
+
+    public List<ITurtleCommand> getCommands(){
+        return commands;
+    }
+
     public int getSize() {
         return commands.size();
     }
