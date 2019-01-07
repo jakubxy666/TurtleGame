@@ -1,4 +1,4 @@
-.idea
-TurtleGame.iml
+*.iml
 out
-TG3.12.iml
+.idea
+.gradle
